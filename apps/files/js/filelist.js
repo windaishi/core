@@ -292,8 +292,13 @@ var FileList={
 		$('#filestable').toggleClass('hidden', show);
 	},
 	remove:function(name){
-		$('tr').filterAttr('data-file',name).find('td.filename').draggable('destroy');
-		$('tr').filterAttr('data-file',name).remove();
+		// file is only draggable when permissions exist
+		var $fileEl = $('tr').filterAttr('data-file',name);
+		if ($fileEl.data('permissions') & OC.PERMISSION_DELETE) {
+			// file is only draggable when delete permissions are set
+			$fileEl.find('td.filename').draggable('destroy');
+		}
+		$fileEl.remove();
 		FileList.updateFileSummary();
 		if ( ! $('tr[data-file]').exists() ) {
 			$('#emptycontent').removeClass('hidden');
