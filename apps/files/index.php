@@ -85,6 +85,8 @@ if (\OC\Files\Cache\Upgrade::needUpgrade($user)) { //dont load anything if we ne
 $breadcrumb = \OCA\Files\Helper::makeBreadcrumb($dir);
 
 // make breadcrumb und filelist markup
+$nav = new OCP\Template('files', 'appnavigation', '');
+
 $list = new OCP\Template('files', 'part.list', '');
 $list->assign('files', $files);
 $list->assign('baseURL', OCP\Util::linkTo('files', 'index.php') . '?dir=');
@@ -125,6 +127,10 @@ if ($needUpgrade) {
 	OCP\Util::addscript('files', 'fileactions');
 	OCP\Util::addscript('files', 'files');
 	OCP\Util::addscript('files', 'keyboardshortcuts');
+	$nav->assign('trash', $trashEnabled);
+	$nav->assign('trashEmpty', $trashEmpty);
+	$nav->assign('hasSharedFiles', \OCA\Files\Helper::hasSharedFiles());
+
 	$tmpl = new OCP\Template('files', 'index', 'user');
 	$tmpl->assign('fileList', $list->fetchPage());
 	$tmpl->assign('breadcrumb', $breadcrumbNav->fetchPage());
@@ -132,12 +138,11 @@ if ($needUpgrade) {
 	$tmpl->assign('isCreatable', $isCreatable);
 	$tmpl->assign('permissions', $permissions);
 	$tmpl->assign('files', $files);
-	$tmpl->assign('trash', $trashEnabled);
-	$tmpl->assign('trashEmpty', $trashEmpty);
-	$tmpl->assign('uploadMaxFilesize', $maxUploadFilesize);
-	$tmpl->assign('uploadMaxHumanFilesize', OCP\Util::humanFileSize($maxUploadFilesize));
 	$tmpl->assign('allowZipDownload', intval(OCP\Config::getSystemValue('allowZipDownload', true)));
 	$tmpl->assign('usedSpacePercent', (int)$storageInfo['relative']);
+	$tmpl->assign('isCreatable', $isCreatable);
+	$tmpl->assign('uploadMaxFilesize', $maxUploadFilesize);
+	$tmpl->assign('uploadMaxHumanFilesize', OCP\Util::humanFileSize($maxUploadFilesize));
 	$tmpl->assign('isPublic', false);
 	$tmpl->assign('publicUploadEnabled', $publicUploadEnabled);
 	$tmpl->assign("encryptedFiles", \OCP\Util::encryptedFiles());
@@ -148,6 +153,7 @@ if ($needUpgrade) {
 	$tmpl->assign('ajaxLoad', $ajaxLoad);
 	$tmpl->assign('emptyContent', $emptyContent);
 	$tmpl->assign('fileHeader', $fileHeader);
+	$tmpl->assign('appNavigation', $nav);
 
 	$tmpl->printPage();
 }

@@ -1,3 +1,5 @@
+<?php $_['appNavigation']->printPage(); ?>
+<div id="app-content">
 <div id="controls">
 	<?php print_unescaped($_['breadcrumb']); ?>
 		<div id="file_action_panel"></div>
@@ -43,3 +45,4 @@
 		<?php print_unescaped($_['fileList']); ?>
 	</tbody>
 </table>
+</div>

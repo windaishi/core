@@ -62,6 +62,10 @@ $breadcrumbNav->assign('breadcrumb', $breadcrumb);
 $breadcrumbNav->assign('baseURL', OCP\Util::linkTo('files_trashbin', 'index.php') . '?dir=');
 $breadcrumbNav->assign('home', OCP\Util::linkTo('files', 'index.php'));
 
+$nav = new OCP\Template('files', 'appnavigation', '');
+$nav->assign('trash', true);
+$nav->assign('hasSharedFiles', \OCA\Files\Helper::hasSharedFiles());
+
 $list = new OCP\Template('files_trashbin', 'part.list', '');
 $list->assign('files', $files);
 
@@ -78,5 +82,6 @@ $tmpl->assign('files', $files);
 $tmpl->assign('dir', $dir);
 $tmpl->assign('disableSharing', true);
 $tmpl->assign('ajaxLoad', true);
+$tmpl->assign('appNavigation', $nav);
 
 $tmpl->printPage();

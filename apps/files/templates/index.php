@@ -1,3 +1,5 @@
+<?php $_['appNavigation']->printPage(); ?>
+<div id="app-content">
 <div id="controls">
 	<?php print_unescaped($_['breadcrumb']); ?>
 		<div class="actions creatable <?php if (!$_['isCreatable']):?>hidden<?php endif; ?>">
@@ -25,9 +27,6 @@
 						   data-url="<?php print_unescaped(OCP\Util::linkTo('files', 'ajax/upload.php')); ?>" />
 					<a href="#" class="svg"></a>
 			</div>
-			<?php if ($_['trash']): ?>
-			<input id="trash" type="button" value="<?php p($l->t('Deleted files'));?>" class="button" <?php $_['trashEmpty'] ? p('disabled') : '' ?>></input>
-			<?php endif; ?>
 			<div id="uploadprogresswrapper">
 				<div id="uploadprogressbar"></div>
 				<input type="button" class="stop" style="display:none"
@@ -96,6 +95,8 @@
 		<?php p($l->t('Current scanning'));?> <span id='scan-current'></span>
 	</p>
 </div>
+
+</div><!-- closing app-content -->
 
 <!-- config hints for javascript -->
 <input type="hidden" name="filesApp" id="filesApp" value="1" />
