@@ -28,6 +28,7 @@ require_once 'public/constants.php';
  * OC_autoload!
  */
 class OC {
+	private static $dbCloseHelper;
 	/**
 	 * Associative array for autoloading. classname => filename
 	 */
@@ -712,6 +713,7 @@ class OC {
 			return;
 		}
 
+
 		// Handle redirect URL for logged in users
 		if (isset($_REQUEST['redirect_url']) && OC_User::isLoggedIn()) {
 			$location = OC_Helper::makeURLAbsolute(urldecode($_REQUEST['redirect_url']));
@@ -732,6 +734,7 @@ class OC {
 			header('Status: 405 Method Not Allowed');
 			return;
 		}
+
 
 		// Someone is logged in :
 		if (OC_User::isLoggedIn()) {
@@ -798,9 +801,10 @@ class OC {
 		if (OC::tryApacheAuth()) {
 			$error[] = 'apacheauthfailed';
 		} // remember was checked after last login
-		elseif (OC::tryRememberLogin()) {
-			$error[] = 'invalidcookie';
-		} // logon via web form
+		// remember login doesnt work in hhvm correctly
+//		elseif (OC::tryRememberLogin()) {
+//			$error[] = 'invalidcookie';
+//		} // logon via web form
 		elseif (OC::tryFormLogin()) {
 			$error[] = 'invalidpassword';
 			if ( OC_Config::getValue('log_authfailip', false) ) {
@@ -841,6 +845,7 @@ class OC {
 	}
 
 	protected static function tryRememberLogin() {
+//		return false;
 		if (!isset($_COOKIE["oc_remember_login"])
 			|| !isset($_COOKIE["oc_token"])
 			|| !isset($_COOKIE["oc_username"])
