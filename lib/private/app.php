@@ -181,11 +181,7 @@ class OC_App{
 			$sql = 'SELECT `appid` FROM `*PREFIX*appconfig`'
 			.' WHERE `configkey` = \'enabled\' AND to_char(`configvalue`)=\'yes\'';
 		}
-		$query = OC_DB::prepare( $sql );
-		$result=$query->execute();
-		if( \OC_DB::isError($result)) {
-			throw new DatabaseException($result->getMessage(), $query);
-		}
+		$result = OC_DB::executeAudited($sql);
 		while($row=$result->fetchRow()) {
 			if(array_search($row['appid'], $apps)===false) {
 				$apps[]=$row['appid'];
