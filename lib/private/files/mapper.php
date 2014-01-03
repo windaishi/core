@@ -49,13 +49,18 @@ class Mapper
 	 */
 	public function removePath($path, $isLogicPath, $recursive) {
 		if ($recursive) {
-			$path=$path.'%';
+        	if ($isLogicPath) {
+        		\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE LOCATE(?, `logic_path`) = 1', array($path));
+        	} else {
+        		\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE LOCATE(?, `physic_path`) = 1', array($path));
+        	}
 		}
-
-		if ($isLogicPath) {
-			\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE `logic_path` LIKE ?', array($path));
-		} else {
-			\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE `physic_path` LIKE ?', array($path));
+		else {
+		    if ($isLogicPath) {
+        		\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE `logic_path` = ?', array($path));
+        	} else {
+        		\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE `physic_path` = ?', array($path));
+        	}
 		}
 	}
 
@@ -71,8 +76,8 @@ class Mapper
 		$physicPath1 = $this->logicToPhysical($path1, true);
 		$physicPath2 = $this->logicToPhysical($path2, true);
 
-		$sql = 'SELECT * FROM `*PREFIX*file_map` WHERE `logic_path` LIKE ?';
-		$result = \OC_DB::executeAudited($sql, array($path1.'%'));
+		$sql = 'SELECT * FROM `*PREFIX*file_map` WHERE LOCATE(?, `logic_path`) = 1';
+		$result = \OC_DB::executeAudited($sql, array($path1));
 		$updateQuery = \OC_DB::prepare('UPDATE `*PREFIX*file_map`'
 			.' SET `logic_path` = ?'
 			.' , `logic_path_hash` = ?'
