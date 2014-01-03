@@ -49,18 +49,18 @@ class Mapper
 	 */
 	public function removePath($path, $isLogicPath, $recursive) {
 		if ($recursive) {
-        	if ($isLogicPath) {
-        		\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE LOCATE(?, `logic_path`) = 1', array($path));
-        	} else {
-        		\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE LOCATE(?, `physic_path`) = 1', array($path));
-        	}
+        		if ($isLogicPath) {
+        			\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE LOCATE(?, `logic_path`) = 1', array($path));
+        		} else {
+        			\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE LOCATE(?, `physic_path`) = 1', array($path));
+        		}
 		}
 		else {
-		    if ($isLogicPath) {
-        		\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE `logic_path` = ?', array($path));
-        	} else {
-        		\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE `physic_path` = ?', array($path));
-        	}
+		        if ($isLogicPath) {
+        			\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE `logic_path` = ?', array($path));
+        		} else {
+        			\OC_DB::executeAudited('DELETE FROM `*PREFIX*file_map` WHERE `physic_path` = ?', array($path));
+        		}
 		}
 	}
 
